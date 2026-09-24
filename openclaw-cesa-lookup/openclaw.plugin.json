@@ -1,0 +1,25 @@
+{
+  "id": "cesa-lookup",
+  "name": "CESA Lookup",
+  "description": "Consult the local, cited CESA knowledge base.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "activation": {
+    "onStartup": true
+  },
+  "contracts": {
+    "tools": [
+      "cesa_lookup"
+    ]
+  },
+  "toolMetadata": {
+    "cesa_lookup": {
+      "optional": true,
+      "profiles": ["minimal"]
+    }
+  }
+}

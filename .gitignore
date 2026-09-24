@@ -1,0 +1,30 @@
+# Datos locales, respuestas y documentos no autorizados para publicación
+data/
+assets/*.pdf
+*.xlsx
+*.pptx
+!presentacion/NidoBot_CESA_vision_y_prototipo_v2.pptx
+*.env
+.env.*
+*token*
+*secret*
+
+# Entorno y compilación reproducible
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+.npm-cache/
+dist/
+*.tsbuildinfo
+
+# Configuración particular de OpenClaw y guías locales históricas
+openclaw-workspace/*
+!openclaw-workspace/AGENTS.md
+openclaw-cesa-*.batch.json
+PASO_A_PASO_OPENCLAW.md
+ARQUITECTURA_SIGUIENTE_PASO.md
+
+# Artefactos temporales de presentación
+presentacion-build/
+.codex-finalizer/

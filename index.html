@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Busca en CESA — prototipo</title>
+  <style>
+    :root { color-scheme: light; --navy:#123a5b; --blue:#176ca2; --pale:#eaf4fa; --ink:#142b3b; --line:#cddde7; }
+    * {box-sizing:border-box} body{margin:0;background:#f3f7fa;color:var(--ink);font:16px/1.5 system-ui,Segoe UI,sans-serif}
+    header{background:var(--navy);color:white;padding:20px max(24px,calc((100vw - 920px)/2))}
+    header h1{margin:0;font-size:26px} header p{margin:4px 0 0;color:#d5e8f5}
+    main{max-width:920px;margin:24px auto;padding:0 18px}
+    .notice{padding:13px 17px;background:#fff8e8;border:1px solid #e9d29e;border-radius:10px;font-size:14px}
+    #messages{margin-top:18px;display:flex;flex-direction:column;gap:12px;min-height:360px}
+    .message{max-width:780px;border-radius:14px;padding:15px 18px;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 1px 3px #102e4418}
+    .user{align-self:flex-end;background:var(--navy);color:white}.bot{align-self:flex-start;background:white;border:1px solid var(--line)}
+    .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.02em;background:var(--pale);color:var(--navy);padding:2px 8px;border-radius:9px;margin-bottom:7px}
+    .badge.warning{background:#fff0c9;color:#6d4c00}.badge.unknown{background:#f7e8e8;color:#7c2525}
+    .answer{white-space:pre-wrap}.sources{border-top:1px solid var(--line);margin-top:12px;padding-top:9px;font-size:13px;white-space:normal}
+    .sources a{display:block;color:var(--blue);margin-top:5px}
+    form{position:sticky;bottom:0;display:flex;gap:10px;background:#f3f7fa;padding:16px 0 20px}
+    input{flex:1;min-width:0;padding:14px 15px;border:1px solid #a6bece;border-radius:10px;font:inherit}
+    button{background:var(--blue);color:white;border:0;border-radius:10px;padding:10px 18px;font:inherit;cursor:pointer}
+    button:disabled{opacity:.5;cursor:wait}.tools{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:13px}
+    .tools button{background:transparent;color:var(--blue);border:1px solid var(--blue);padding:6px 10px}
+    .examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.examples button{font-size:13px;background:white;color:var(--blue);border:1px solid var(--line);padding:6px 10px}
+  </style>
+</head>
+<body>
+<header><h1>Busca en CESA</h1><p>Prototipo local para encontrar información con fuente y enlace</p></header>
+<main>
+  <div class="notice">Cubre la malla aportada, avisos compartidos, reglamento y algunas páginas públicas del CESA. No entra a tu cuenta de Nido, no ve notas ni ejecuta trámites. Una respuesta sin fuente verificable estará marcada.</div>
+  <div class="tools"><button id="refresh" type="button">Actualizar páginas públicas</button><span id="status">Consultando base local…</span></div>
+  <div class="examples">
+    <button type="button">¿Cómo pido un certificado?</button>
+    <button type="button">¿Cuáles son las materias de séptimo semestre?</button>
+    <button type="button">¿Qué ocurre si supero el 30 % de faltas?</button>
+    <button type="button">¿Dónde está la máquina de pizzas Fiamma?</button>
+  </div>
+  <div id="messages" aria-live="polite"></div>
+  <form id="form"><input id="question" autocomplete="off" aria-label="Tu pregunta" placeholder="Pregunta por un trámite, materia, reglamento o aviso…" maxlength="350" required><button id="send">Enviar</button></form>
+</main>
+<script>
+const messages = document.getElementById('messages');
+const question = document.getElementById('question');
+const send = document.getElementById('send');
+const status = document.getElementById('status');
+function addMessage(text, role, result) {
+  const card = document.createElement('div'); card.className = 'message ' + role;
+  if (role === 'user') card.textContent = text;
+  else {
+    const labels = {verified_public:'Fuente pública', user_supplied:'Aviso o archivo aportado · vigencia no confirmada', source_excerpt:'Fragmento de fuente', ai_draft:'Respuesta generada · verifica fuentes', no_match:'Sin cobertura', ambiguous:'Aclaremos la pregunta'};
+    const badge = document.createElement('span'); badge.className='badge ' + (result.status==='user_supplied'?'warning':result.status==='no_match'?'unknown':'');
+    badge.textContent=labels[result.status] || 'Respuesta'; card.appendChild(badge);
+    const answer = document.createElement('div'); answer.className='answer'; answer.textContent=text; card.appendChild(answer);
+    if (result.note) { const note=document.createElement('div'); note.className='sources'; note.textContent=result.note; card.appendChild(note); }
+    if (result.sources?.length) {
+      const wrap=document.createElement('div'); wrap.className='sources'; wrap.textContent='Fuentes:';
+      for (const source of result.sources) {
+        if (!source.url) { const item=document.createElement('div'); item.textContent=source.title + ' (sin enlace verificable)'; wrap.appendChild(item); continue; }
+        const link=document.createElement('a'); link.href=source.url; link.target='_blank'; link.rel='noopener noreferrer'; link.textContent=source.title; wrap.appendChild(link);
+      }
+      card.appendChild(wrap);
+    }
+  }
+  messages.appendChild(card); card.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+async function ask(text) {
+  const value=text.trim(); if (!value) return; addMessage(value,'user'); question.value=''; send.disabled=true;
+  try {
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:value})});
+    if (!res.ok) throw new Error('Error '+res.status);
+    const data=await res.json(); addMessage(data.answer,'bot',data);
+  } catch (err) {addMessage('No pude consultar la base local: '+err.message,'bot',{status:'no_match'});}
+  finally {send.disabled=false;question.focus();}
+}
+document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();ask(question.value)});
+document.querySelectorAll('.examples button').forEach(b=>b.addEventListener('click',()=>ask(b.textContent)));
+document.getElementById('refresh').addEventListener('click',async e=>{
+  e.target.disabled=true; status.textContent='Actualizando fuentes públicas…';
+  try {const r=await fetch('/api/refresh',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const d=await r.json();
+    status.textContent=`${d.updated?.length||0} fuentes actualizadas; ${d.errors?.length||0} errores.`;
+    if (d.errors?.length) addMessage('Algunas fuentes no se pudieron actualizar:\n'+d.errors.join('\n'),'bot',{status:'no_match'});
+  } catch(err){status.textContent='Actualización fallida: '+err.message} finally {e.target.disabled=false;}
+});
+fetch('/api/status').then(r=>r.json()).then(d=>status.textContent=`${d.facts} fichas · ${d.courses} materias · ${d.passages} fragmentos · IA ${d.openai_configured?'configurada':'sin configurar'} · Apify ${d.apify_runtime_configured?'configurado':'sin configurar'}`).catch(()=>status.textContent='Base local no disponible');
+addMessage('Puedes preguntarme por certificados, reglamento, Saber Pro, malla curricular o los avisos compartidos. Si no tengo evidencia suficiente, te lo diré.', 'bot', {status:'verified_public'});
+</script>
+</body>
+</html>
