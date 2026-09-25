@@ -68,7 +68,9 @@ El proyecto de hackatón está aislado y no tiene relación con el futuro reto A
 
 - `app.py`, `smart.py`, `knowledge.py`: servicio local, búsqueda y fichas.
 - `openclaw-cesa-lookup/`: herramienta `cesa_lookup` para el agente de OpenClaw.
-- `openclaw-workspace/AGENTS.md`: instrucciones mínimas del agente CESA.
+- `openclaw-workspace/AGENTS.md`: instrucciones operativas y límites del agente César.
+- `openclaw-workspace/IDENTITY.md` y `SOUL.md`: nombre, voz y límites de César.
+- `openclaw-workspace/skills/`: tres skills del agente para trámites públicos, información académica general y apoyo estudiantil no clínico. Son instrucciones, no integraciones nuevas ni permisos.
 - `skills/nidobot-cesa/SKILL.md`: guía de mantenimiento y evaluación del proyecto.
 - `test_app.py`, `evaluar_simulacion.py`: pruebas reproducibles. El conjunto de 50 preguntas es simulado, no una prueba de precisión con usuarios reales.
 

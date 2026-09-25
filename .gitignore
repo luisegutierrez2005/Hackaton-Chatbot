@@ -21,6 +21,19 @@ dist/
 # Configuración particular de OpenClaw y guías locales históricas
 openclaw-workspace/*
 !openclaw-workspace/AGENTS.md
+!openclaw-workspace/IDENTITY.md
+!openclaw-workspace/SOUL.md
+!openclaw-workspace/skills/
+openclaw-workspace/skills/*
+!openclaw-workspace/skills/cesa-tramites-publicos/
+!openclaw-workspace/skills/cesa-vida-academica/
+!openclaw-workspace/skills/cesa-apoyo-estudiantil/
+openclaw-workspace/skills/cesa-tramites-publicos/*
+openclaw-workspace/skills/cesa-vida-academica/*
+openclaw-workspace/skills/cesa-apoyo-estudiantil/*
+!openclaw-workspace/skills/cesa-tramites-publicos/SKILL.md
+!openclaw-workspace/skills/cesa-vida-academica/SKILL.md
+!openclaw-workspace/skills/cesa-apoyo-estudiantil/SKILL.md
 openclaw-cesa-*.batch.json
 PASO_A_PASO_OPENCLAW.md
 ARQUITECTURA_SIGUIENTE_PASO.md

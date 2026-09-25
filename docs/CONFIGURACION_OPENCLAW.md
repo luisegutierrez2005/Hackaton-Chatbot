@@ -26,7 +26,7 @@ npm test
 openclaw plugins validate --entry ./dist/index.js
 ```
 
-Instala o enlaza el complemento con el procedimiento que indique tu versión de OpenClaw. Crea un agente **separado** cuyo workspace use `openclaw-workspace/AGENTS.md` y cuyo conjunto de herramientas no permita más que `cesa_lookup` y las capacidades mínimas del canal. El plugin únicamente llama a `127.0.0.1:8765`; no le des acceso a shell, archivos, navegador ni sesiones personales.
+Instala o enlaza el complemento con el procedimiento que indique tu versión de OpenClaw. Crea un agente **separado** cuyo workspace sea `openclaw-workspace/`, con `AGENTS.md`, `IDENTITY.md`, `SOUL.md` y sus tres skills en `skills/`. Si tu instalación ya usa otra ruta para el agente CESA, copia únicamente esos archivos públicos tras revisar qué hay allí; no sustituyas su estado ni sus credenciales sin comprobarlo. El conjunto de herramientas del agente no debe permitir más que `cesa_lookup` y las capacidades mínimas del canal. Los archivos de personalidad y las skills **no** conceden permisos. El plugin solo llama a `127.0.0.1:8765`; no le des acceso a shell, archivos, navegador ni sesiones personales.
 
 ## Canal Telegram
 
