@@ -1,4 +1,4 @@
-# NidoBot CESA — prototipo y visión
+# César CESA — prototipo y visión
 
 Proyecto académico independiente; no es un servicio oficial del CESA ni tiene acceso a cuentas de estudiantes.
 
@@ -6,7 +6,7 @@ Proyecto académico independiente; no es un servicio oficial del CESA ni tiene a
 
 **Prototipo demostrable:** búsqueda y respuesta sobre información general en SQLite, web local y un agente aislado de OpenClaw conectado a Telegram mediante `cesa_lookup`. Las respuestas usan fichas y enlaces; el sistema se abstiene ante datos personales o evidencia insuficiente. El rastreo acotado de páginas públicas existe, pero el contenido extraído no pasa automáticamente a ser una respuesta verificada. La conexión de OpenAI Responses y Composio/Apify del backend es opcional y no estaba configurada en la última verificación documentada.
 
-Las encuestas originales y la presentación de partida no se publican: contienen respuestas individuales y afirmaciones que pertenecen a la visión, no al prototipo. El resumen agregado se encuentra en [docs/EVIDENCIA_Y_ALCANCE.md](docs/EVIDENCIA_Y_ALCANCE.md).
+Las encuestas originales y la presentación de partida no se publican: contienen respuestas individuales y afirmaciones que pertenecen a la visión, no al prototipo. El resumen agregado se encuentra en [docs/EVIDENCIA_Y_ALCANCE.md](docs/EVIDENCIA_Y_ALCANCE.md). La [presentación actualizada](presentacion/Cesar_CESA_vision_y_prototipo_v8.pptx) separa explícitamente la visión futura del prototipo.
 
 Un chatbot de **recuperación con fuentes**, no un asistente conectado a la sesión personal de Nido. Su base SQLite integra la malla PDF aportada por Luis, fichas verificadas del reglamento y del sitio oficial, avisos aportados por Luis (marcados sin vigencia confirmada) y fragmentos de páginas públicas. El módulo opcional `smart.py` puede redactar con OpenAI Responses API y, ante ausencia de cobertura, extraer una página pública concreta mediante Apify/Composio. No usa API de Ellucian ni inventa rutas privadas. Sin credenciales externas conserva la respuesta local anterior.
 
@@ -48,7 +48,9 @@ En la instalación local usada para la demostración, Telegram se asoció a un a
 
 `telegram_bridge.py` consulta la misma base directamente por [long polling de Telegram](https://core.telegram.org/bots/api#getupdates). No expone el puerto local ni requiere OpenClaw. Crea un bot con BotFather y configura `TELEGRAM_BOT_TOKEN` **en el entorno local, nunca en este chat**; luego ejecuta `python telegram_bridge.py`. El proceso debe seguir encendido para responder. Solo procesa mensajes privados de texto. Por ejecución acepta hasta 50 preguntas globales y 10 por chat, con ocho segundos mínimos entre preguntas del mismo chat; se puede ajustar con `TELEGRAM_MAX_QUESTIONS` y `TELEGRAM_MAX_PER_CHAT`. Guarda únicamente el offset de Telegram, no el texto de las conversaciones.
 
-El adaptador alternativo `telegram_bridge.py` solo se probó con respuestas simuladas. En el canal OpenClaw, Telegram y la herramienta `cesa_lookup` ya respondieron en pruebas manuales anteriores; la evaluación de 15 preguntas del 24-09-2026 se hizo contra `/api/chat`, no directamente contra Telegram. Antes de abrir el bot a nuevos usuarios, comprueba las reglas de emparejamiento y la restricción de herramientas. No publiques tu agente general con acceso a archivos o shell.
+El adaptador alternativo `telegram_bridge.py` solo se probó con respuestas simuladas. En el canal OpenClaw, Telegram y la herramienta `cesa_lookup` ya respondieron en pruebas manuales anteriores; la evaluación de 15 preguntas del 24-09-2026 se hizo contra `/api/chat`, no directamente contra Telegram.
+
+Estado de la demostración local al 24-09-2026: con autorización del propietario, **solo la cuenta Telegram `cesa`** permite mensajes privados de cualquier usuario (`dmPolicy=open`, `allowFrom=["*"]`). El agente conserva el perfil de herramientas mínimo y `cesa_lookup` como única herramienta adicional; el gateway y el servicio local respondían en la última comprobación. Hubo una interrupción de sondeo de Telegram que se recuperó, y aún **no se verificó una respuesta completa desde la cuenta externa mostrada en la prueba del QR**. El QR no limita quién puede encontrar el bot: el acceso abierto puede generar consumo de API y requiere observar fallos, abuso y costos. No publiques tu agente general con acceso a archivos o shell.
 
 ## Alcance y procedencia
 
@@ -71,6 +73,7 @@ El proyecto de hackatón está aislado y no tiene relación con el futuro reto A
 - `openclaw-workspace/AGENTS.md`: instrucciones operativas y límites del agente César.
 - `openclaw-workspace/IDENTITY.md` y `SOUL.md`: nombre, voz y límites de César.
 - `openclaw-workspace/skills/`: tres skills del agente para trámites públicos, información académica general y apoyo estudiantil no clínico. Son instrucciones, no integraciones nuevas ni permisos.
+- `presentacion/Cesar_CESA_vision_y_prototipo_v8.pptx`: presentación editable basada en la V7, con el estado actual del prototipo y la validación externa pendiente.
 - `skills/nidobot-cesa/SKILL.md`: guía de mantenimiento y evaluación del proyecto.
 - `test_app.py`, `evaluar_simulacion.py`: pruebas reproducibles. El conjunto de 50 preguntas es simulado, no una prueba de precisión con usuarios reales.
 

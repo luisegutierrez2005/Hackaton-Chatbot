@@ -4,6 +4,7 @@ assets/*.pdf
 *.xlsx
 *.pptx
 !presentacion/NidoBot_CESA_vision_y_prototipo_v2.pptx
+!presentacion/Cesar_CESA_vision_y_prototipo_v8.pptx
 *.env
 .env.*
 *token*

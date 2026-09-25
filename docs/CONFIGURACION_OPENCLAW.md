@@ -32,8 +32,10 @@ Instala o enlaza el complemento con el procedimiento que indique tu versión de 
 
 Crea tu propio bot con BotFather y guarda el token solo en el almacén local de secretos o la configuración privada de OpenClaw. No lo escribas en archivos del repositorio, commits, issues ni chats. Vincula la cuenta de Telegram al agente CESA aislado y conserva una política de emparejamiento o lista permitida durante las pruebas. Si se amplía el acceso a otras personas, revisa antes límites por usuario, costos del modelo y supervisión del contenido.
 
+En la demostración local de César, el propietario autorizó el acceso abierto a mensajes privados **solo** para la cuenta `cesa`. Esta guía no publica ni copia esa configuración. Un acceso así admite a cualquiera que encuentre el usuario del bot, no solo a quien reciba el QR. La conexión del gateway se comprobó, pero la respuesta desde la cuenta externa usada en la prueba del QR sigue pendiente de confirmación.
+
 La ruta directa `telegram_bridge.py` es alternativa, no un segundo proceso simultáneo: dos consumidores de `getUpdates` para el mismo bot pueden interferir. La web local llama directamente a `/api/chat` y no pasa por OpenClaw.
 
 ## Funciones que no se habilitan con estos pasos
 
-No hay acceso a Nido autenticado, notas, pagos personales, NRC, motor de horarios ni matrícula automática. `OPENAI_API_KEY` y `COMPOSIO_API_KEY` son opciones independientes del backend, no son la sesión de ChatGPT ni se heredan de OpenClaw. No habilites el bot público sin validar fuentes, privacidad, abuso y observabilidad.
+No hay acceso a Nido autenticado, notas, pagos personales, NRC, motor de horarios ni matrícula automática. `OPENAI_API_KEY` y `COMPOSIO_API_KEY` son opciones independientes del backend, no son la sesión de ChatGPT ni se heredan de OpenClaw. El acceso abierto de la demostración no equivale a un servicio listo para producción: faltan validación externa, límites por usuario, control de costos, revisión de privacidad y observabilidad.
