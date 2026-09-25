@@ -5,6 +5,7 @@ assets/*.pdf
 *.pptx
 !presentacion/NidoBot_CESA_vision_y_prototipo_v2.pptx
 !presentacion/Cesar_CESA_vision_y_prototipo_v8.pptx
+!presentacion/Cesar_CESA_vision_y_prototipo_v9.pptx
 *.env
 .env.*
 *token*
@@ -41,4 +42,5 @@ ARQUITECTURA_SIGUIENTE_PASO.md
 
 # Artefactos temporales de presentación
 presentacion-build/
+entregables_locales/
 .codex-finalizer/

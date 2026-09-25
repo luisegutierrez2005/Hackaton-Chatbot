@@ -36,6 +36,10 @@ En la demostración local de César, el propietario autorizó el acceso abierto 
 
 La ruta directa `telegram_bridge.py` es alternativa, no un segundo proceso simultáneo: dos consumidores de `getUpdates` para el mismo bot pueden interferir. La web local llama directamente a `/api/chat` y no pasa por OpenClaw.
 
+## Disponibilidad de la demostración
+
+El bot de la demostración se ejecuta en el PC personal del equipo. Para responder por Telegram, el PC debe estar encendido y conectado a Internet, `python app.py serve` debe seguir activo y el gateway de OpenClaw también. Apagar el equipo o cualquiera de esos procesos interrumpe la atención. El repositorio permite reproducir el prototipo, pero no proporciona alojamiento permanente ni garantiza que el bot esté disponible en todo momento.
+
 ## Funciones que no se habilitan con estos pasos
 
 No hay acceso a Nido autenticado, notas, pagos personales, NRC, motor de horarios ni matrícula automática. `OPENAI_API_KEY` y `COMPOSIO_API_KEY` son opciones independientes del backend, no son la sesión de ChatGPT ni se heredan de OpenClaw. El acceso abierto de la demostración no equivale a un servicio listo para producción: faltan validación externa, límites por usuario, control de costos, revisión de privacidad y observabilidad.
